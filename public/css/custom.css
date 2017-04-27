@@ -1,0 +1,11 @@
+.chat-messages {
+	max-height: 200px;
+	overflow: auto;
+}
+.chat-box {
+	margin: 0 auto !important;
+    text-align: center;
+}
+.chat-btn {
+    margin-top: 8px;
+}

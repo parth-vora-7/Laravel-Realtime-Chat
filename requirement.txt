@@ -1,0 +1,66 @@
+1) User has to login in order to chat
+2) After login, on homepage there will two options:
+i) Group chat button
+- Clicking on the button will redirect user to /chat url
+
+ii) Personal chat button
+- User will see list of all the user (also indicate who are online)
+- User will select an user from the list to whom he/she wants to chat
+- User will get redirect to chat/{receiver-id}
+
+
+
+URLs:
+To create:   group-chat              GET
+To store:    group-chat              POST
+To edit:     group-chat/{messageid}  PUT
+To delete:   group-chat/{messageid}  DELETE
+
+Controller
+To create: chat/{username}           GET
+To store:  chat                      POST
+To edit:   chat/{messageid}          PUT
+To delete: chat/{messageid}          DELETE
+
+Controllers:
+- GroupController
+- ChatController
+
+Models:
+- GroupChat
+- Chat
+
+Database:
+- Table: chat_rooms - id room_type[private, group, public] created_at updated_at
+- Table: room_members - id room_id user_ids
+- Table: messages - id room_id sender_id message created_at updated_at
+- Table: receivers - id message_id receiver_id read_at
+
+Private chat room: Can have between two users only
+Group chat room: Create by a user, he/she can add other users into the group
+Public chat room: A open group that any members can use
+
+
+
+chat_room has many room_members
+chat_room has meny messages
+
+messages has one sender
+messages has many receivers through chat
+
+
+
+
+Pendig:
+1) User Avatar
+2) Improve design (responsive)
+3) User is writting **
+4) Joined/left room
+
+Security
+1) Exlclude js, css, php
+
+Advance
+1) Allow basic HTML
+2) Allow smiley
+
