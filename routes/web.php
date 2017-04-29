@@ -26,18 +26,9 @@ Route::post('group-chat', 'GroupChatController@store')->name('group.chat.store')
 
 Route::get('private-chat/{chatroom}', 'PrivateChatController@index')->name('private.chat.index');
 Route::post('private-chat/{chatroom}', 'PrivateChatController@store')->name('private.chat.store');
+Route::get('private-chat', 'PrivateChatController@get')->name('user.private.chat.get');
 
 Route::get('test', function() {
-<<<<<<< HEAD
-	$message = App\Models\Message::first();
-	dd($message->receivers->first()->receiver_id);
-	$message->receivers->pluck('receiver_id')->contains(auth()->user()->id);
-
-	$a = $message->receivers->pluck('receiver_id')->contains(auth()->user()->id);
-	dd($a);
-=======
-	$arr = [3, 1];
-	sort($arr);
-	dd($arr);
->>>>>>> 19055efaf6541cf31c16a20425946d90b828df02
+	$chatRoom = App\Models\ChatRoom::first();
+	dd(in_array(auth()->user()->id, explode(',', $chatRoom->user_ids)));
 });

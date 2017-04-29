@@ -15,8 +15,9 @@
     return (int) $user->id === (int) $id;
 });*/
 
-Broadcast::channel('private-chat-room.{message}', function ($user, $message) {
-	if($user->id == $message->sender_id || $user->id == $message->receivers->first()->receiver_id) {
+Broadcast::channel('private-chat-room.{chatRoom}', function ($user, $chatRoom) {
+	$chatRoom = App\Models\ChatRoom::find($chatRoom);
+	if(in_array(auth()->user()->id, explode(',', $chatRoom->user_ids))) {
 		return true;
 	} else {
 		return false;

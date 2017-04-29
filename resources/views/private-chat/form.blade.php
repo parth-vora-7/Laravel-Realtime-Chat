@@ -7,11 +7,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Private Chat</div>
                 <div class="panel-body">
-<<<<<<< HEAD
-                    <form id="group-chat" class="form-horizontal" role="form" method="POST" action="{{ route('private.chat.store', $chatroom->id) }}" @submit.prevent="sendPrivateMessage">
-=======
-                    <form id="group-chat" class="form-horizontal" role="form" method="POST" action="{{ route('private.chat.store', $chatRoom->id) }}">
->>>>>>> 19055efaf6541cf31c16a20425946d90b828df02
+                    <form id="group-chat" class="form-horizontal" role="form" method="POST" action="{{ route('private.chat.store', $chatRoom->id) }}" @submit.prevent="sendPrivateMessage">
                         {{ csrf_field() }}
                         <div class="chat-messages">
                             @if($messages->count())
@@ -53,11 +49,7 @@
 
 @section('chat')
 <script>
-<<<<<<< HEAD
-    window.Echo.private(`private-chat-room.${ {{$chatroom->id}} }`)
-=======
-    window.Echo.private(`chat.room.${ {{$chatRoom->id}} }`)
->>>>>>> 19055efaf6541cf31c16a20425946d90b828df02
+    window.Echo.private(`private-chat-room.${ {{$chatRoom->id}} }`)
     .listen('PrivateMessageEvent', (e) => {
         app.updateChat(e);
     });
@@ -71,25 +63,14 @@
             return false;
         }
     });
-<<<<<<< HEAD
-    /*Echo.private(`chat.${ {{$chatroom->id}} }`)
-=======
-    Echo.private(`chat.${ {{$chatRoom->id}} }`)
->>>>>>> 19055efaf6541cf31c16a20425946d90b828df02
+
+    /*Echo.private(`chat.${ {{$chatRoom->id}} }`)
     .listenForWhisper('typing', (e) => {
         var ele = $('.typing');
         ele.find('span').text(e.name);
         ele.removeClass('hidden').delay(1000).queue(function(next){
-<<<<<<< HEAD
-           ele.addClass('hidden')
-           next();
+
        });
-    });*/
-=======
-         ele.addClass('hidden')
-         next();
-     });
-    });
->>>>>>> 19055efaf6541cf31c16a20425946d90b828df02
+   });*/
 </script>
 @endsection

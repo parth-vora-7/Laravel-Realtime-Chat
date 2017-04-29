@@ -7,11 +7,8 @@ use App\Events\PrivateMessageEvent;
 use App\Models\User;
 use App\Models\ChatRoom;
 use App\Models\Message;
-<<<<<<< HEAD
 use App\Models\Receiver;
-=======
 use App\Models\RoomMember;
->>>>>>> 19055efaf6541cf31c16a20425946d90b828df02
 
 class PrivateChatController extends Controller
 {
@@ -25,31 +22,13 @@ class PrivateChatController extends Controller
 		$this->middleware('auth');
 	}
 
-	public function index($receiverId)
+    public function index()
     {
-<<<<<<< HEAD
-        $senderId = auth()->user()->id;
-        $roomMembers = ['sender' => $senderId, 'receivers' => $receiverId];
-        sort($roomMembers);
-        $roomMembers = implode($roomMembers, ',');
 
-        $chatroom = ChatRoom::where([
-            'room_type' => 'private',
-            'user_ids' => $roomMembers
-            ])
-        ->first();
+    }
 
-        if(!$chatroom) {
-            $chatroom = new ChatRoom;
-            $chatroom->room_type = 'private';
-            $chatroom->user_ids = $roomMembers;
-            $chatroom->save();            
-        }
-
-        $chat = Message::where('chat_room_id', $chatroom->id)->get();
-
-        return view('private-chat.form', compact('chat', 'chatroom'));
-=======
+    public function index($receiverId)
+    {
         $senderUserId = auth()->user()->id;
         $roomMembers = [$receiverId, $senderUserId];
         sort($roomMembers);
@@ -65,7 +44,6 @@ class PrivateChatController extends Controller
 
         $messages = Message::where('chat_room_id', $chatRoom->id)->get();
         return view('private-chat.form', compact('chatRoom', 'messages'));
->>>>>>> 19055efaf6541cf31c16a20425946d90b828df02
     }
 
     public function store(ChatRoom $chatroom)
