@@ -13,9 +13,9 @@ use App\Models\Message;
 
 class PrivateMessageEvent implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, InteractsWithSockets;
 
-    public $message, $sender;
+    public $message;
     /**
      * Create a new event instance.
      *
@@ -24,7 +24,6 @@ class PrivateMessageEvent implements ShouldBroadcast
     public function __construct(Message $message)
     {
         $this->message = $message;
-        $this->sender = $message->sender;
     }
 
     /**
@@ -34,6 +33,6 @@ class PrivateMessageEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('private-chat-room' . $this->message->chat_room_id);
+        return new PrivateChannel('private-chat-room-' . $this->message->chat_room_id);
     }
 }

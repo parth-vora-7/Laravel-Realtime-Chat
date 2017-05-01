@@ -15,7 +15,7 @@
     return (int) $user->id === (int) $id;
 });*/
 
-Broadcast::channel('private-chat-room.{chatRoom}', function ($user, $chatRoom) {
+Broadcast::channel('private-chat-room-{chatRoom}', function ($user, $chatRoom) {
 	$chatRoom = App\Models\ChatRoom::find($chatRoom);
 	if(in_array(auth()->user()->id, explode(',', $chatRoom->user_ids))) {
 		return true;
@@ -24,17 +24,7 @@ Broadcast::channel('private-chat-room.{chatRoom}', function ($user, $chatRoom) {
 	}
 });
 
-Broadcast::channel('chat.{chatRoomId}', function ($user, $chatRoomId) {
-	$participants = collect(App\ChatRoom::where('id', $chatRoomId)->first(['sender_id', 'receiver_id'])->toArray());
-	
-	if($participants->contains($user->id)) {
-		return true;
-	} else {
-		return false;
-	}
-});
-
-Broadcast::channel('chat', function ($user) {
+Broadcast::channel('typing-room-{chatRoom}', function ($user, $chatRoom) {
 	return true;
 });
 

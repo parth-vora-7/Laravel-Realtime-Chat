@@ -18,7 +18,9 @@
     <script>
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
+            'user' =>  auth()->user()
         ]) !!};
+        var fetchChatURL = null;
     </script>
 </head>
 <body>
@@ -82,12 +84,14 @@
         @yield('content')
     </div>
 
-    @yield('script')
     <!-- Scripts -->
+    <script type="text/javascript">
+    @yield('routes')
+    </script>
     <script src="//{{ Request::getHost() }}:6001/socket.io/socket.io.js"></script>
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/notify.min.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
-    @yield('chat')
+    @yield('script')
 </body>
 </html>

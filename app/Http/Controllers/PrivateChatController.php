@@ -8,7 +8,6 @@ use App\Models\User;
 use App\Models\ChatRoom;
 use App\Models\Message;
 use App\Models\Receiver;
-use App\Models\RoomMember;
 
 class PrivateChatController extends Controller
 {
@@ -22,9 +21,9 @@ class PrivateChatController extends Controller
 		$this->middleware('auth');
 	}
 
-    public function index()
+    public function get(ChatRoom $chatroom)
     {
-
+        return ChatRoom::with('messages.sender')->find($chatroom);
     }
 
     public function index($receiverId)
@@ -42,8 +41,7 @@ class PrivateChatController extends Controller
             $chatRoom->save();
         }
 
-        $messages = Message::where('chat_room_id', $chatRoom->id)->get();
-        return view('private-chat.form', compact('chatRoom', 'messages'));
+        return view('private-chat.form', compact('chatRoom'));
     }
 
     public function store(ChatRoom $chatroom)
@@ -64,9 +62,9 @@ class PrivateChatController extends Controller
         $receiver->receiver_id = $receiverId;
 
         if($receiver->save()) {
-            event(new PrivateMessageEvent($message));
-            //broadcast(new ShippingStatusUpdated($update))->toOthers();
-            return $message->room_id;
+            $message = Message::with('sender')->find($message->id);
+            broadcast(new PrivateMessageEvent($message))->toOthers();
+            return $message;
         } else {
             dd('Something went wrong!!');
         }

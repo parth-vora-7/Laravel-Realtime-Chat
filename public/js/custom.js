@@ -1,42 +1,45 @@
-Vue.component('pv-message', {
-	props: ['sender', 'message'],
-	template: '<div><b>{{ sender }}:</b><p>{{ message }}</p></div>'
-})
-
 var app = new Vue({
 	el: '#app',
+	components: {
+		message: {
+			props: ['sender', 'message'],
+			template: '<div><b>{{ sender }}</b><p>{{ message }}</p></div>'		
+		}
+	},
 	data: {
+		messages: '',
 		message: '',
 	},
 	mounted: function() {
-		var chatContainer = $('.chat-messages');
-		if(chatContainer.length) {
-			chatContainer.scrollTop(chatContainer[0].scrollHeight);
+		if(fetchChatURL) {
+			this.fetchChat();
 		}
 	},
 	methods: {
-		sendPrivateMessage: function(evevt) {
-			var url = event.currentTarget.getAttribute('action');
+		sendPrivateMessage: function(event) {
 			var th = this;
-			axios.post(url, {
+			axios.post(savePrivateChatURL, {
 				'message': th.message,
 			})
 			.then(function (response) {
 				th.message = '';
+				th.messages.push(response.data);
+				th.adjustChatContainer();
 			})
 			.catch(function (error) {
 				console.log(error);
 			})
 		},
-		getChat: function() {
-			// var th = this;
-			// axios.get(getGroupMessageMessages()
-			// .then(function (response) {
-			// 	console.log(response);
-			// })
-			// .catch(function (error) {
-			// 	console.log(error);
-			// })
+		fetchChat: function() {
+			var th = this;
+			axios.get(fetchChatURL)
+			.then(function (response) {
+				th.messages = response.data.messages;
+				th.adjustChatContainer();
+			})
+			.catch(function (error) {
+				console.log(error);
+			})
 		},
 		sendGroupMessage: function() {
 			var th = this;
@@ -57,17 +60,20 @@ var app = new Vue({
 			});
 		},
 		updateChat: function(res) {
-			console.log('asd');
+			this.messages.push(res.message);
+		}, 
+		adjustChatContainer: function() {
+			var chatContainer = document.getElementById('messages');
+			if(chatContainer) {
+				chatContainer.scrollTop = chatContainer.scrollHeight;
+			}
+		},
+		userIsTyping: function(chatRoomId) {
+			console.log(chatRoomId);
+			Echo.private('typing-room-' + chatRoomId)
+			.whisper('typing', {
+				name: window.Laravel.user.name
+			});
 		}
 	},
 })
-
-/*function updateChat(res) {	
-	var chatContainer = $('.chat-messages');
-	var messageHtml = '<div>';
-	messageHtml += '<b>' + res.sender.name + '</b>';
-	messageHtml += '<p>' + res.message.message + '</p>';
-	messageHtml += '</div>';
-	chatContainer.append(messageHtml);
-	chatContainer.scrollTop(chatContainer[0].scrollHeight);
-}*/

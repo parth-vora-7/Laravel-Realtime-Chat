@@ -26,9 +26,9 @@ Route::post('group-chat', 'GroupChatController@store')->name('group.chat.store')
 
 Route::get('private-chat/{chatroom}', 'PrivateChatController@index')->name('private.chat.index');
 Route::post('private-chat/{chatroom}', 'PrivateChatController@store')->name('private.chat.store');
-Route::get('private-chat', 'PrivateChatController@get')->name('user.private.chat.get');
+Route::get('fetch-private-chat/{chatroom}/', 'PrivateChatController@get')->name('fetch-private.chat');
 
 Route::get('test', function() {
-	$chatRoom = App\Models\ChatRoom::first();
-	dd(in_array(auth()->user()->id, explode(',', $chatRoom->user_ids)));
+	$p = App\Models\ChatRoom::with('messages.sender')->find(1);
+	dd($p);
 });

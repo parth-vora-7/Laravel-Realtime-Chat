@@ -10,11 +10,11 @@ class ChatRoom extends Model
 	'room_type', 'user_ids'
 	];
 
-	/**
- 	* Get the sender of the message
+ 	/**
+ 	* Get the messages of a chat room
  	*/
- 	public function sender()
+ 	public function messages()
  	{
- 		return $this->hasOne('App\Models\User', 'sender_id');
+ 		return $this->hasMany('App\Models\Message', 'chat_room_id');
  	}
  }
