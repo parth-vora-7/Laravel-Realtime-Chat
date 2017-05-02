@@ -10,19 +10,19 @@ var savePrivateChatURL = "{{ route('private.chat.store', $chatRoom->id) }}";
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Private Chat</div>
+                <div class="panel-heading">Private Chat with {{ $receiver->name }}</div>
                 <div class="panel-body">
                     <form id="group-chat" class="form-horizontal" role="form" method="POST" @submit.prevent="sendPrivateMessage">
                         {{ csrf_field() }}
                         <div id="messages">
                             <div v-if="messages.length">
-                                <message v-for="message in messages" key="message.id" :sender="message.sender.name" :message="message.message"></message>
+                                <message v-for="message in messages" key="message.id" :sender="message.sender.name" :message="message.message" :createdat="message.created_at"></message>
                             </div>
                             <div v-else>
                                 <div class="alert alert-warning">No chat yet!</div>
                             </div>
                         </div>
-                        <span class="typing hidden"><i><span></span>is typing</i></span>
+                        <span class="typing" v-if="isTyping"><i><span>@{{ isTyping }}</span>is typing</i></span>
                         <hr/>
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }} chat-box">
                             <div class="col-md-10">
@@ -35,7 +35,7 @@ var savePrivateChatURL = "{{ route('private.chat.store', $chatRoom->id) }}";
                                 @endif
                             </div>
                             <div class="col-md-2 chat-btn">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary" :disabled="!message">
                                     Send
                                 </button>
                             </div>
@@ -54,19 +54,13 @@ var savePrivateChatURL = "{{ route('private.chat.store', $chatRoom->id) }}";
     .listen('PrivateMessageEvent', (e) => {
         app.updateChat(e);
     });
-    $('#chat-message').keypress(function (e) {
 
-    });
-
-    Echo.private('typing-room-' + '{{$chatRoom->id}}')
+    window.Echo.private(`typing-room-{{$chatRoom->id}}`)
     .listenForWhisper('typing', (e) => {
-        console.log(e);
-        return;
-        var ele = $('.typing');
-        ele.find('span').text(e.name);
-        ele.removeClass('hidden').delay(1000).queue(function(next){
-
-        });
+        app.isTyping = e.name;
+        setTimeout(function() {
+            app.isTyping = '';
+        }, 1000);
     });
 </script>
 @endsection

@@ -23,11 +23,12 @@ class PrivateChatController extends Controller
 
     public function get(ChatRoom $chatroom)
     {
-        return ChatRoom::with('messages.sender')->find($chatroom);
+        return $chatroom->messages;
     }
 
     public function index($receiverId)
     {
+        $receiver = User::find($receiverId);
         $senderUserId = auth()->user()->id;
         $roomMembers = [$receiverId, $senderUserId];
         sort($roomMembers);
@@ -41,7 +42,7 @@ class PrivateChatController extends Controller
             $chatRoom->save();
         }
 
-        return view('private-chat.form', compact('chatRoom'));
+        return view('private-chat.form', compact('chatRoom', 'receiver'));
     }
 
     public function store(ChatRoom $chatroom)
@@ -66,7 +67,7 @@ class PrivateChatController extends Controller
             broadcast(new PrivateMessageEvent($message))->toOthers();
             return $message;
         } else {
-            dd('Something went wrong!!');
+            return 'Something went wrong!!';
         }
     }
 }

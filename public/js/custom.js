@@ -2,21 +2,20 @@ var app = new Vue({
 	el: '#app',
 	components: {
 		message: {
-			props: ['sender', 'message'],
-			template: '<div><b>{{ sender }}</b><p>{{ message }}</p></div>'		
+			props: ['sender', 'message', 'createdat'],
+			template: '<div><b>{{ sender }}</b> {{ createdat }}<p>{{ message }}</p></div>',
 		}
 	},
 	data: {
 		messages: '',
 		message: '',
-	},
-	mounted: function() {
-		if(fetchChatURL) {
-			this.fetchChat();
-		}
+		isTyping: ''
 	},
 	methods: {
 		sendPrivateMessage: function(event) {
+			if(this.message.trim() == '' || this.message.trim == null) {
+				return;
+			}
 			var th = this;
 			axios.post(savePrivateChatURL, {
 				'message': th.message,
@@ -34,7 +33,7 @@ var app = new Vue({
 			var th = this;
 			axios.get(fetchChatURL)
 			.then(function (response) {
-				th.messages = response.data.messages;
+				th.messages = response.data;
 				th.adjustChatContainer();
 			})
 			.catch(function (error) {
@@ -53,12 +52,6 @@ var app = new Vue({
 				console.log(error);
 			})
 		},
-		userIsTyping: function() {
-			Echo.private('chat')
-			.whisper('typing', {
-				name: loggedInUser.name
-			});
-		},
 		updateChat: function(res) {
 			this.messages.push(res.message);
 		}, 
@@ -69,11 +62,22 @@ var app = new Vue({
 			}
 		},
 		userIsTyping: function(chatRoomId) {
-			console.log(chatRoomId);
-			Echo.private('typing-room-' + chatRoomId)
+			window.Echo.private(`typing-room-${chatRoomId}`)
 			.whisper('typing', {
 				name: window.Laravel.user.name
 			});
 		}
+	},
+	postedOn: function(created_at) {
+		var date = new Date(created_at);
+		return date.getHours() + ' ' + date.getMinutes();
+	},
+	mounted: function() {
+		if(fetchChatURL) {
+			this.fetchChat();
+		}
+	},
+	updated: function() {
+		this.adjustChatContainer();
 	},
 })
