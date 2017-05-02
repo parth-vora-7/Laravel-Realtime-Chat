@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('routes')
-var fetchChatURL = "{{ route('fetch-private.chat', $chatRoom->id) }}";
-var postChatURL = "{{ route('private.chat.store', $chatRoom->id) }}";
+var fetchChatURL = "{{ route('fetch-public.chat', $chatRoom->id) }}";
+var postChatURL = "{{ route('public.chat.store', $chatRoom->id) }}";
 @endsection
 
 @section('content')
@@ -10,7 +10,7 @@ var postChatURL = "{{ route('private.chat.store', $chatRoom->id) }}";
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Private Chat with {{ $receiver->name }}</div>
+                <div class="panel-heading">Public Chat</div>
                 <div class="panel-body">
 
                     <form id="group-chat" class="form-horizontal" role="form" method="POST" @submit.prevent="sendMessage">
@@ -51,8 +51,17 @@ var postChatURL = "{{ route('private.chat.store', $chatRoom->id) }}";
 
 @section('script')
 <script>
-    window.Echo.private(`private-chat-room-{{$chatRoom->id}}`)
-    .listen('PrivateMessageEvent', (e) => {
+    window.Echo.join(`room-events-{{$chatRoom->id}}`)
+    .here((users) => {
+        console.log(users);
+    }).joining((user) => {
+        console.log(user);
+    }).leaving((user) => {
+        console.log(user);
+    });
+
+    window.Echo.channel(`public-chat-room-{{$chatRoom->id}}`)
+    .listen('PublicMessageEvent', (e) => {
         app.updateChat(e);
     });
 

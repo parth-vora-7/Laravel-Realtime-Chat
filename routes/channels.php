@@ -24,10 +24,10 @@ Broadcast::channel('private-chat-room-{chatRoom}', function ($user, $chatRoom) {
 	}
 });
 
-Broadcast::channel('typing-room-{chatRoom}', function ($user, $chatRoom) {
-	return true;
+Broadcast::channel('room-events-{chatRoom}', function ($user, $chatRoom) {
+	return $user;
 });
 
-Broadcast::channel('groupjoined', function ($user) {
-	return $user;
+Broadcast::channel('typing-room-{chatRoom}', function ($user, $chatRoom) {
+	return true;
 });

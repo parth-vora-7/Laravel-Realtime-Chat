@@ -16,7 +16,7 @@ class CreateChatRoomsTable extends Migration
         Schema::create('chat_rooms', function (Blueprint $table) {
             $table->increments('id');
             $table->enum('room_type', ['private', 'group', 'public']);
-            $table->string('user_ids');
+            $table->string('user_ids')->nullable();
             $table->timestamps();
         });
     }

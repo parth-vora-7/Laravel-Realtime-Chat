@@ -3,8 +3,14 @@ var app = new Vue({
 	components: {
 		message: {
 			props: ['sender', 'message', 'createdat'],
-			template: '<div><b>{{ sender }}</b> {{ createdat }}<p>{{ message }}</p></div>',
-		}
+			template: '<div><b>{{ sender }}</b> - {{ createdat | showChatTime }}<p>{{ message }}</p></div>',
+			filters: {
+				showChatTime: function (createdat) {
+					var date = new Date(createdat);
+					return ("0" + date.getHours()).slice(-2) + ':' + ("0" + date.getMinutes()).slice(-2);
+				}
+			}
+		},
 	},
 	data: {
 		messages: '',
@@ -12,12 +18,12 @@ var app = new Vue({
 		isTyping: ''
 	},
 	methods: {
-		sendPrivateMessage: function(event) {
+		sendMessage: function(event) {
 			if(this.message.trim() == '' || this.message.trim == null) {
 				return;
 			}
 			var th = this;
-			axios.post(savePrivateChatURL, {
+			axios.post(postChatURL, {
 				'message': th.message,
 			})
 			.then(function (response) {
@@ -66,11 +72,7 @@ var app = new Vue({
 			.whisper('typing', {
 				name: window.Laravel.user.name
 			});
-		}
-	},
-	postedOn: function(created_at) {
-		var date = new Date(created_at);
-		return date.getHours() + ' ' + date.getMinutes();
+		},
 	},
 	mounted: function() {
 		if(fetchChatURL) {

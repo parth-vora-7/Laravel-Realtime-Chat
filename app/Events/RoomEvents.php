@@ -9,23 +9,21 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use App\User;
-use App\GroupChat;
+use App\Models\ChatRoom;
 
-class GroupMessageEvent implements ShouldBroadcast
+class RoomEvents implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, InteractsWithSockets;
 
-    public $message, $sender;
+    public $chatRoom;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(GroupChat $message, User $sender)
+    public function __construct(ChatRoom $chatRoom)
     {
-        $this->message = $message;
-        $this->sender = $sender;
+        $this->chatRoom = $chatRoom;
     }
 
     /**
@@ -35,6 +33,6 @@ class GroupMessageEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('groupchat');
+        return new PresenceChannel('room-events-' . $this->chatRoom->id);
     }
 }
