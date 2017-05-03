@@ -3,11 +3,13 @@ var app = new Vue({
 	components: {
 		message: {
 			props: ['sender', 'message', 'createdat'],
-			template: '<div><b>{{ sender }}</b> - {{ createdat | showChatTime }}<p>{{ message }}</p></div>',
+			template: '<div><b>{{ sender }}</b> <sub class="createdat">{{ createdat | showChatTime }}</sub><p>{{ message }}</p></div>',
 			filters: {
 				showChatTime: function (createdat) {
 					var date = new Date(createdat);
-					return ("0" + date.getHours()).slice(-2) + ':' + ("0" + date.getMinutes()).slice(-2);
+					date = ("0" + date.getDate()).slice(-2) + '/' + ("0" + date.getMonth()).slice(-2) + '/' + date.getFullYear() + ' ' +
+					("0" + date.getHours()).slice(-2) + ':' + ("0" + date.getMinutes()).slice(-2);
+					return date;
 				}
 			}
 		},
@@ -15,7 +17,8 @@ var app = new Vue({
 	data: {
 		messages: '',
 		message: '',
-		isTyping: ''
+		isTyping: '',
+		onlineUsers: []
 	},
 	methods: {
 		sendMessage: function(event) {
