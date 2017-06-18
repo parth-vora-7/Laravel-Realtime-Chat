@@ -1,5 +1,5 @@
 {
-	"authHost": "http://localhost:8000",
+	"authHost": "http://localhost/laravel-realtime-chat/public",
 	"authEndpoint": "/broadcasting/auth",
 	"clients": [],
 	"database": "redis",

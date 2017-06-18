@@ -17,7 +17,7 @@ class CreateReceiversTable extends Migration
             $table->increments('id');
             $table->integer('message_id')->references('id')->on('messages');
             $table->integer('receiver_id')->references('id')->on('users');
-            $table->timestamp('read_at');
+            $table->timestamp('read_at')->nullable();
         });
     }
 

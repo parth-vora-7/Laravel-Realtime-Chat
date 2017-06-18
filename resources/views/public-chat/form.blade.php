@@ -22,7 +22,7 @@ var postChatURL = "{{ route('public.chat.store', $chatRoom->id) }}";
                                 <div class="alert alert-warning" v-cloak>No chat yet!</div>
                             </div>
                         </div>
-                        <span class="typing" v-if="isTyping"><i><span>@{{ isTyping }}</span>is typing</i></span>
+                        <span class="typing" v-if="isTyping"><i><span>@{{ isTyping }}</span> is typing</i></span>
                         <hr/>
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }} chat-box">
                             <div class="col-md-10">
