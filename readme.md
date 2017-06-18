@@ -1,19 +1,17 @@
-Prerequisite
+<h3>Prerequisite</h3>
 
-Set BROADCAST_DRIVER to redis in .env file (And make sure you have redis installed on your machine & redis service is on)
+Make sure you have redis installed on your machine and redis service is on.
 
-Required commands to run the project:
-
+<h3>How to run?</h3>
+sd
 1) Install composer dependencies by running composer install
 
-2) Install node dependencies by running npm install
+2) Install Laravel echo server globally by running npm install -g laravel-echo-server
 
-3) Install Laravel echo server globally by running npm install -g laravel-echo-server
+3) Change database credentials into .env file according to your environment and run php artisan migrate
 
-4) laravel-echo-server start (keep running in background)
+4) Set BROADCAST_DRIVER and QUEUE_DRIVER to redis into .env file
 
-5) php artisan queue:work (keep running in background)
+5) Change authHost into laravel-echo-server.json file according to your site URL
 
-6) php artisan serve (optional)
-
-
+6) Run laravel-echo-server start (keep running in background)
