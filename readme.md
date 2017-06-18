@@ -15,3 +15,7 @@ Make sure you have redis installed on your machine and redis service is on.
 5) Change authHost into laravel-echo-server.json file according to your site URL
 
 6) Run `laravel-echo-server start` (keep running in background)
+
+<h3>Live demo</h3>
+
+http://52.66.22.29/lara_chat/public
