@@ -10,7 +10,7 @@ Make sure you have redis installed on your machine and redis service is on.
 
 3) Change database credentials into .env file according to your environment and run php artisan migrate
 
-4) Set BROADCAST_DRIVER and QUEUE_DRIVER to redis into .env file
+4) Set BROADCAST_DRIVER to redis and QUEUE_DRIVER to sync into .env file
 
 5) Change authHost into laravel-echo-server.json file according to your site URL
 
