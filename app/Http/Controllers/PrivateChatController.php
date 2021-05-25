@@ -32,7 +32,7 @@ class PrivateChatController extends Controller
         $senderUserId = auth()->user()->id;
         $roomMembers = [$receiverId, $senderUserId];
         sort($roomMembers);
-        $roomMembers = implode($roomMembers, ',');
+	$roomMembers = implode(',', $roomMembers);
         
         $chatRoom = ChatRoom::where('user_ids', $roomMembers)->first();
         if(is_null($chatRoom)) {
